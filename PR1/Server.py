@@ -1,17 +1,17 @@
-import rpyc
+from xmlrpc.server import SimpleXMLRPCServer
 
-def Factorial(n):
-    if n == 0 or n == 1:
-        return 1
-    else:
-        return n * Factorial(n - 1)
+def print_hello(name=''):
+    return 'Hello '+name
 
-class FactorialService(rpyc.Service):
-    def exposed_calculate_factorial(self, n):
-        return Factorial(n)
-
-if __name__ == "__main__":
-    from rpyc.utils.server import ThreadedServer
-    server = ThreadedServer(FactorialService, port=18861)
-    print("Server is running...")
-    server.start()
+def factorial(n):
+    fact=1
+    for i in range(1,n+1):
+        fact*=i
+    return fact
+       
+server = SimpleXMLRPCServer(("localhost", 8000))
+print("Listening on port 8000...")
+server.register_multicall_functions()
+server.register_function(print_hello, "print_hello")
+server.register_function(factorial,'Factorial')
+server.serve_forever()

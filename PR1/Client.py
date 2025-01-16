@@ -1,7 +1,5 @@
-import rpyc
-
-if __name__ == "__main__":
-    conn = rpyc.connect("localhost", 18861)
-    num = int(input("Enter an integer to calculate its factorial: "))
-    result = conn.root.calculate_factorial(num)
-    print(f"The factorial of {num} is {result}")
+import xmlrpc.client
+n=int(input('Enter the value of n:'))
+with xmlrpc.client.ServerProxy("http://localhost:8000/") as proxy:
+    print("Printing: %s" % str(proxy.print_hello('Atharva')))
+    print(f"Fatcorial of {n}: %s" % str(proxy.Factorial(n)))
